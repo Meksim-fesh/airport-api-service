@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 
 class AirplaneType(models.Model):
@@ -100,3 +101,25 @@ class Flight(models.Model):
 
     def __str__(self) -> str:
         return f"{self.route} ({self.departure_time})"
+
+
+class Order(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+
+
+class Ticket(models.Model):
+    row = models.IntegerField()
+    seat = models.IntegerField()
+    flight = models.ForeignKey(
+        Flight,
+        on_delete=models.CASCADE,
+        related_name="flights",
+    )
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+    )
