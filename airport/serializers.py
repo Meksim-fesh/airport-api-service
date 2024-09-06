@@ -18,6 +18,7 @@ class AirplaneSerializer(serializers.ModelSerializer):
             "rows",
             "seats_in_row",
             "airplane_type",
+            "capacity",
         )
 
 
@@ -68,6 +69,7 @@ class CrewSerializer(serializers.ModelSerializer):
             "id",
             "first_name",
             "last_name",
+            "full_name",
         )
 
 

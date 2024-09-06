@@ -19,6 +19,10 @@ class Airplane(models.Model):
         related_name="airplanes",
     )
 
+    @property
+    def capacity(self) -> int:
+        return self.rows * self.seats_in_row
+
     def __str__(self) -> str:
         return f"{self.name} ({self.airplane_type})"
 
@@ -77,8 +81,12 @@ class Crew(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
 
-    def __str__(self) -> str:
+    @property
+    def full_name(self) -> str:
         return f"{self.first_name} {self.last_name}"
+
+    def __str__(self) -> str:
+        return self.full_name
 
 
 class Flight(models.Model):
