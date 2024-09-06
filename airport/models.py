@@ -15,9 +15,8 @@ class Airplane(models.Model):
     seats_in_row = models.IntegerField()
     airplane_type = models.ForeignKey(
         AirplaneType,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
+        related_name="airplanes",
     )
 
     def __str__(self) -> str:
@@ -35,8 +34,8 @@ class City(models.Model):
     name = models.CharField(max_length=255)
     country = models.ForeignKey(
         Country,
-        null=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
+        related_name="cities",
     )
 
     def __str__(self) -> str:
@@ -47,8 +46,8 @@ class Airport(models.Model):
     name = models.CharField(max_length=255)
     city = models.ForeignKey(
         City,
-        null=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
+        related_name="airports",
     )
 
     def __str__(self) -> str:
@@ -86,15 +85,13 @@ class Flight(models.Model):
     crew = models.ManyToManyField(Crew)
     route = models.ForeignKey(
         Route,
-        null=True,
         on_delete=models.CASCADE,
-        related_name="routes",
+        related_name="flights",
     )
     airplane = models.ForeignKey(
         Airplane,
-        null=True,
         on_delete=models.CASCADE,
-        related_name="airplanes",
+        related_name="flights",
     )
     departure_time = models.DateTimeField()
     arrival_time = models.DateTimeField()
@@ -110,6 +107,9 @@ class Order(models.Model):
         on_delete=models.CASCADE,
     )
 
+    def __str__(self) -> str:
+        return str(self.created_at)
+
 
 class Ticket(models.Model):
     row = models.IntegerField()
@@ -117,9 +117,13 @@ class Ticket(models.Model):
     flight = models.ForeignKey(
         Flight,
         on_delete=models.CASCADE,
-        related_name="flights",
+        related_name="tickets",
     )
     order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
+        related_name="tickets",
     )
+
+    def __str__(self) -> str:
+        return f"{self.flight} (row: {self.row}, seat: {self.seat})"
