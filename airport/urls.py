@@ -1,15 +1,21 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from airport.views import AirplaneTypeViewSet, AirplaneViewSet, AirportViewSet, CityViewSet, CountryViewSet
+from airport import views
 
 
 router = routers.DefaultRouter()
-router.register("airplane-types", AirplaneTypeViewSet)
-router.register("airplanes", AirplaneViewSet)
-router.register("countries", CountryViewSet)
-router.register("cities", CityViewSet)
-router.register("airports", AirportViewSet)
+router.register("airplane-types", views.AirplaneTypeViewSet)
+router.register("airplanes", views.AirplaneViewSet)
+router.register("countries", views.CountryViewSet)
+router.register("cities", views.CityViewSet)
+router.register("airports", views.AirportViewSet)
+router.register("routes", views.RouteViewSet)
+router.register("crews", views.CrewViewSet)
+router.register("flights", views.FlightViewSet)
+router.register("tickets", views.TicketViewSet)
+router.register("orders", views.OrderViewSet)
+
 
 urlpatterns = [
     path("", include(router.urls)),
