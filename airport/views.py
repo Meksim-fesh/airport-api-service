@@ -40,12 +40,22 @@ class CityViewSet(
     serializer_class = serializers.CitySerializer
 
 
-class AirportViewSet(ModelViewSet):
+class AirportViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    GenericViewSet,
+):
     queryset = models.Airport.objects.all()
     serializer_class = serializers.AirportSerializer
 
 
-class RouteViewSet(ModelViewSet):
+class RouteViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    GenericViewSet,
+):
     queryset = models.Route.objects.all()
     serializer_class = serializers.RouteSerializer
 
