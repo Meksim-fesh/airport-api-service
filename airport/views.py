@@ -1,24 +1,41 @@
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework import mixins
 
 from airport import models, serializers
 
 
-class AirplaneTypeViewSet(ModelViewSet):
+class AirplaneTypeViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    GenericViewSet,
+):
     queryset = models.AirplaneType.objects.all()
     serializer_class = serializers.AirplaneTypeSerializer
 
 
-class AirplaneViewSet(ModelViewSet):
+class AirplaneViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    GenericViewSet,
+):
     queryset = models.Airplane.objects.all()
     serializer_class = serializers.AirplaneSerializer
 
 
-class CountryViewSet(ModelViewSet):
+class CountryViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    GenericViewSet,
+):
     queryset = models.Country.objects.all()
     serializer_class = serializers.CountrySerializer
 
 
-class CityViewSet(ModelViewSet):
+class CityViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    GenericViewSet,
+):
     queryset = models.City.objects.all()
     serializer_class = serializers.CitySerializer
 
@@ -38,7 +55,11 @@ class FlightViewSet(ModelViewSet):
     serializer_class = serializers.FlightSerializer
 
 
-class CrewViewSet(ModelViewSet):
+class CrewViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    GenericViewSet,
+):
     queryset = models.Crew.objects.all()
     serializer_class = serializers.CrewSerializer
 
@@ -48,6 +69,10 @@ class TicketViewSet(ModelViewSet):
     serializer_class = serializers.TicketSerializer
 
 
-class OrderViewSet(ModelViewSet):
+class OrderViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    GenericViewSet,
+):
     queryset = models.Order.objects.all()
     serializer_class = serializers.OrderSerializer
