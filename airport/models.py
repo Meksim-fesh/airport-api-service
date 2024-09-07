@@ -44,7 +44,7 @@ class City(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"{self.name} ({self.country})"
+        return self.name
 
 
 class Airport(models.Model):

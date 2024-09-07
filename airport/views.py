@@ -46,8 +46,15 @@ class AirportViewSet(
     mixins.RetrieveModelMixin,
     GenericViewSet,
 ):
-    queryset = models.Airport.objects.all()
-    serializer_class = serializers.AirportSerializer
+    queryset = models.Airport.objects.select_related("city__country")
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return serializers.AirportListSerializer
+        elif self.action == "retrieve":
+            return serializers.AirportDetailSerializer
+
+        return serializers.AirportSerializer
 
 
 class RouteViewSet(
