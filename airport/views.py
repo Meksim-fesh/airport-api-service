@@ -74,11 +74,6 @@ class CrewViewSet(
     serializer_class = serializers.CrewSerializer
 
 
-class TicketViewSet(ModelViewSet):
-    queryset = models.Ticket.objects.all()
-    serializer_class = serializers.TicketSerializer
-
-
 class OrderViewSet(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
