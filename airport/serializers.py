@@ -156,5 +156,8 @@ class OrderSerializer(serializers.ModelSerializer):
             "id",
             "created_at",
             "tickets",
-            "user",
         )
+
+
+class OrderListSerializer(OrderSerializer):
+    pass

@@ -87,4 +87,14 @@ class OrderViewSet(
     GenericViewSet,
 ):
     queryset = models.Order.objects.all()
-    serializer_class = serializers.OrderSerializer
+
+    def get_queryset(self):
+        return models.Order.objects.filter(user=self.request.user)
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return serializers.OrderListSerializer
+        return serializers.OrderSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
