@@ -68,7 +68,13 @@ class RouteViewSet(
     GenericViewSet,
 ):
     queryset = models.Route.objects.all()
-    serializer_class = serializers.RouteSerializer
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return serializers.RouteListSerializer
+        if self.action == "retrieve":
+            return serializers.RouteDetailSerializer
+        return serializers.RouteSerializer
 
 
 class FlightViewSet(ModelViewSet):

@@ -107,6 +107,22 @@ class RouteSerializer(serializers.ModelSerializer):
         )
 
 
+class RouteListSerializer(RouteSerializer):
+    source = serializers.CharField(read_only=True, source="source.name")
+    destination = serializers.CharField(
+        read_only=True, source="destination.name"
+    )
+
+    class Meta:
+        model = models.Route
+        fields = ("id", "source", "destination",)
+
+
+class RouteDetailSerializer(RouteSerializer):
+    source = AirportDetailSerializer(many=False, read_only=True)
+    destination = AirportDetailSerializer(many=False, read_only=True)
+
+
 class CrewSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Crew
