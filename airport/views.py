@@ -37,7 +37,11 @@ class CityViewSet(
     GenericViewSet,
 ):
     queryset = models.City.objects.all()
-    serializer_class = serializers.CitySerializer
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return serializers.CityListSerializer
+        return serializers.CitySerializer
 
 
 class AirportViewSet(
