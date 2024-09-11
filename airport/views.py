@@ -1,6 +1,8 @@
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import mixins
 
+from django.db.models import F, Count
+
 from airport import models, serializers
 
 
@@ -82,7 +84,12 @@ class RouteViewSet(
 
 
 class FlightViewSet(ModelViewSet):
-    queryset = models.Flight.objects.all()
+    queryset = models.Flight.objects.all().annotate(
+        tickets_available=(
+            F("airplane__rows") * F("airplane__seats_in_row")
+            - Count("tickets")
+        )
+    )
 
     def get_serializer_class(self):
         if self.action == "list":
