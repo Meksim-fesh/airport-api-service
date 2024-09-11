@@ -18,8 +18,12 @@ class AirplaneViewSet(
     mixins.ListModelMixin,
     GenericViewSet,
 ):
-    queryset = models.Airplane.objects.all()
-    serializer_class = serializers.AirplaneSerializer
+    queryset = models.Airplane.objects.select_related("airplane_type")
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return serializers.AirplaneListSerializer
+        return serializers.AirplaneSerializer
 
 
 class CountryViewSet(
