@@ -25,7 +25,7 @@ class Airplane(models.Model):
         return self.rows * self.seats_in_row
 
     def __str__(self) -> str:
-        return f"{self.name} ({self.airplane_type})"
+        return self.name
 
 
 class Country(models.Model):
@@ -75,7 +75,7 @@ class Route(models.Model):
     distance = models.IntegerField()
 
     def __str__(self) -> str:
-        return f"{self.source} - {self.destination}"
+        return self.source.name + " - " + self.destination.name
 
 
 class Crew(models.Model):

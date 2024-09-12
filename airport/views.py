@@ -42,7 +42,7 @@ class CityViewSet(
     mixins.ListModelMixin,
     GenericViewSet,
 ):
-    queryset = models.City.objects.all()
+    queryset = models.City.objects.select_related("country")
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -73,7 +73,15 @@ class RouteViewSet(
     mixins.RetrieveModelMixin,
     GenericViewSet,
 ):
-    queryset = models.Route.objects.all()
+    queryset = models.Route.objects.prefetch_related("source", "destination")
+
+    def get_queryset(self):
+        queryset = self.queryset
+        if self.action == "retrieve":
+            queryset = models.Route.objects.select_related(
+                "source__city__country", "destination__city__country"
+            )
+        return queryset
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -90,6 +98,20 @@ class FlightViewSet(ModelViewSet):
             - Count("tickets")
         )
     )
+
+    def get_queryset(self):
+        queryset = self.queryset
+        if self.action == "list":
+            queryset = queryset.select_related(
+                "route__source__city", "route__destination__city",
+            )
+        if self.action == "retrieve":
+            queryset = queryset.select_related(
+                "route__source__city__country",
+                "route__destination__city__country",
+                "airplane__airplane_type",
+            ).prefetch_related("crew", "tickets",)
+        return queryset
 
     def get_serializer_class(self):
         if self.action == "list":
