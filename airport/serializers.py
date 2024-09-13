@@ -192,6 +192,10 @@ class TicketSerializer(serializers.ModelSerializer):
         )
 
 
+class TicketListSerializer(TicketSerializer):
+    flight = FlightListSerializer(many=False, read_only=True)
+
+
 class TicketSeatSerializer(TicketSerializer):
     class Meta:
         model = models.Ticket
@@ -242,4 +246,4 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class OrderListSerializer(OrderSerializer):
-    pass
+    tickets = TicketListSerializer(many=True, read_only=True)

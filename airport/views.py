@@ -138,7 +138,12 @@ class OrderViewSet(
     queryset = models.Order.objects.all()
 
     def get_queryset(self):
-        return models.Order.objects.filter(user=self.request.user)
+        return models.Order.objects.filter(
+            user=self.request.user
+        ).prefetch_related(
+            "tickets__flight__route__destination",
+            "tickets__flight__route__source"
+        )
 
     def get_serializer_class(self):
         if self.action == "list":
