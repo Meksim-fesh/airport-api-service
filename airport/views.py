@@ -1,5 +1,6 @@
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import mixins
+from rest_framework.permissions import IsAuthenticated
 
 from django.db.models import F, Count
 
@@ -136,6 +137,7 @@ class OrderViewSet(
     GenericViewSet,
 ):
     queryset = models.Order.objects.all()
+    permission_classes = (IsAuthenticated, )
 
     def get_queryset(self):
         return models.Order.objects.filter(
