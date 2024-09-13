@@ -1,10 +1,21 @@
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import mixins
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
 
 from django.db.models import F, Count
 
 from airport import models, serializers
+
+
+class OrderPagination(PageNumberPagination):
+    page_size = 10
+    max_page_size = 100
+
+
+class FlightPagination(PageNumberPagination):
+    page_size = 20
+    max_page_size = 100
 
 
 class AirplaneTypeViewSet(
@@ -99,6 +110,7 @@ class FlightViewSet(ModelViewSet):
             - Count("tickets")
         )
     )
+    pagination_class = FlightPagination
 
     def get_queryset(self):
         queryset = self.queryset
@@ -138,6 +150,7 @@ class OrderViewSet(
 ):
     queryset = models.Order.objects.all()
     permission_classes = (IsAuthenticated, )
+    pagination_class = OrderPagination
 
     def get_queryset(self):
         return models.Order.objects.filter(
