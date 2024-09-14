@@ -112,18 +112,76 @@ class FlightViewSet(ModelViewSet):
     )
     pagination_class = FlightPagination
 
+    def _filter_by_airport(self, queryset):
+        source_airport_id_str = self.request.query_params.get("source_airport")
+        destination_airport_id_str = self.request.query_params.get(
+            "destination_airport"
+        )
+
+        if source_airport_id_str:
+            queryset = queryset.filter(
+                route__source__id=int(source_airport_id_str)
+            )
+
+        if destination_airport_id_str:
+            queryset = queryset.filter(
+                route__destination__id=int(destination_airport_id_str)
+            )
+
+        return queryset
+
+    def _filter_by_city(self, queryset):
+        source_city_id_str = self.request.query_params.get("source_city")
+        destination_city_id_str = self.request.query_params.get(
+            "destination_city"
+        )
+
+        if source_city_id_str:
+            queryset = queryset.filter(
+                route__source__city__id=int(source_city_id_str)
+            )
+
+        if destination_city_id_str:
+            queryset = queryset.filter(
+                route__destination__city__id=int(destination_city_id_str)
+            )
+
+        return queryset
+
+    def _filter_by_date(self, queryset):
+        departure_date = self.request.query_params.get("departure_date")
+
+        if departure_date:
+            queryset = queryset.filter(
+                departure_time__date__gte=departure_date
+            )
+
+        return queryset
+
+    def filter_by_query_params(self, queryset):
+        queryset = self._filter_by_airport(queryset)
+        queryset = self._filter_by_city(queryset)
+        queryset = self._filter_by_date(queryset)
+
+        return queryset
+
     def get_queryset(self):
         queryset = self.queryset
+
+        queryset = self.filter_by_query_params(queryset)
+
         if self.action == "list":
             queryset = queryset.select_related(
                 "route__source__city", "route__destination__city",
             )
+
         if self.action == "retrieve":
             queryset = queryset.select_related(
                 "route__source__city__country",
                 "route__destination__city__country",
                 "airplane__airplane_type",
             ).prefetch_related("crew", "tickets",)
+
         return queryset
 
     def get_serializer_class(self):
