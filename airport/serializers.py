@@ -85,6 +85,7 @@ class AirportListSerializer(AirportSerializer):
             "id",
             "name",
             "city",
+            "image",
         )
 
 
@@ -99,6 +100,16 @@ class AirportDetailSerializer(AirportSerializer):
             "name",
             "city",
             "country",
+            "image",
+        )
+
+
+class AirportImageSerializer(AirportSerializer):
+    class Meta:
+        model = models.Airport
+        fields = (
+            "id",
+            "image",
         )
 
 

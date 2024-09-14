@@ -1,7 +1,9 @@
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
-from rest_framework import mixins
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import mixins, status
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from django.db.models import F, Count
 
@@ -117,7 +119,25 @@ class AirportViewSet(
         if self.action == "retrieve":
             return serializers.AirportDetailSerializer
 
+        if self.action == "upload_image":
+            return serializers.AirportImageSerializer
+
         return serializers.AirportSerializer
+
+    @action(
+        methods=["POST"],
+        detail=True,
+        url_path="upload-image",
+        permission_classes=[IsAdminUser,]
+    )
+    def upload_image(self, request, pk=None):
+        airport = self.get_object()
+        serializer = self.get_serializer(airport, data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class RouteViewSet(
