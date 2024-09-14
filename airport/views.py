@@ -37,6 +37,7 @@ class AirplaneViewSet(
     def get_serializer_class(self):
         if self.action == "list":
             return serializers.AirplaneListSerializer
+
         return serializers.AirplaneSerializer
 
 
@@ -59,6 +60,7 @@ class CityViewSet(
     def get_serializer_class(self):
         if self.action == "list":
             return serializers.CityListSerializer
+
         return serializers.CitySerializer
 
 
@@ -73,7 +75,8 @@ class AirportViewSet(
     def get_serializer_class(self):
         if self.action == "list":
             return serializers.AirportListSerializer
-        elif self.action == "retrieve":
+
+        if self.action == "retrieve":
             return serializers.AirportDetailSerializer
 
         return serializers.AirportSerializer
@@ -98,8 +101,10 @@ class RouteViewSet(
     def get_serializer_class(self):
         if self.action == "list":
             return serializers.RouteListSerializer
+
         if self.action == "retrieve":
             return serializers.RouteDetailSerializer
+
         return serializers.RouteSerializer
 
 
@@ -187,8 +192,10 @@ class FlightViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.action == "list":
             return serializers.FlightListSerializer
-        elif self.action == "retrieve":
+
+        if self.action == "retrieve":
             return serializers.FlightDetailSerializer
+
         return serializers.FlightSerializer
 
 
@@ -221,6 +228,7 @@ class OrderViewSet(
     def get_serializer_class(self):
         if self.action == "list":
             return serializers.OrderListSerializer
+
         return serializers.OrderSerializer
 
     def perform_create(self, serializer):
