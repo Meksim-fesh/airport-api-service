@@ -72,6 +72,44 @@ class AirportViewSet(
 ):
     queryset = models.Airport.objects.select_related("city__country")
 
+    @staticmethod
+    def _params_to_ints(params) -> list[int]:
+        return [int(id_str) for id_str in params.split(",")]
+
+    def _filter_by_location(self, queryset):
+        city_ids_str = self.request.query_params.get("cities")
+        country_ids_str = self.request.query_params.get("countries")
+
+        if city_ids_str:
+            city_ids = self._params_to_ints(city_ids_str)
+            queryset = queryset.filter(city__id__in=city_ids)
+
+        if country_ids_str:
+            country_ids = self._params_to_ints(country_ids_str)
+            queryset = queryset.filter(city__country__id__in=country_ids)
+
+        return queryset
+
+    def _filter_by_name(self, queryset):
+        airport_name = self.request.query_params.get("airport_name")
+
+        if airport_name:
+            queryset = queryset.filter(name__icontains=airport_name)
+
+        return queryset
+
+    def filter_by_query_params(self, queryset):
+        queryset = self._filter_by_location(queryset)
+        queryset = self._filter_by_name(queryset)
+        return queryset
+
+    def get_queryset(self):
+        queryset = self.queryset
+
+        queryset = self.filter_by_query_params(queryset)
+
+        return queryset
+
     def get_serializer_class(self):
         if self.action == "list":
             return serializers.AirportListSerializer
