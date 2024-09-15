@@ -340,6 +340,16 @@ class CrewViewSet(
     queryset = models.Crew.objects.all()
     serializer_class = serializers.CrewSerializer
 
+    @extend_schema()
+    def list(self, request, *args, **kwargs):
+        """Returns list of crew members"""
+        return super().list(request, *args, **kwargs)
+
+    @extend_schema()
+    def create(self, request, *args, **kwargs):
+        """Creates an instance of the Crew model"""
+        return super().create(request, *args, **kwargs)
+
 
 class OrderViewSet(
     mixins.CreateModelMixin,
@@ -366,3 +376,13 @@ class OrderViewSet(
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    @extend_schema()
+    def list(self, request, *args, **kwargs):
+        """Returns list of user orders"""
+        return super().list(request, *args, **kwargs)
+
+    @extend_schema()
+    def create(self, request, *args, **kwargs):
+        """Creates an instance of the Order model"""
+        return super().create(request, *args, **kwargs)
