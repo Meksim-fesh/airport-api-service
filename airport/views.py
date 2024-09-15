@@ -187,13 +187,21 @@ class AirportViewSet(
         parameters=[
             OpenApiParameter(
                 name="cities",
-                description="Filter by city id (ex. ?cities=1,3)",
+                description=(
+                    "Filter by city id"
+                    " (ex. ?cities=1,3)."
+                    " Note: Multiple ids can be provided"
+                ),
                 required=False,
                 type={"type": "list", "items": {"type": "number"}},
             ),
             OpenApiParameter(
                 name="country",
-                description="Filter by country id (ex. ?countries=2,6)",
+                description=(
+                    "Filter by country id"
+                    " (ex. ?countries=2,6)."
+                    " Note: Multiple ids can be provided"
+                ),
                 required=False,
                 type={"type": "list", "items": {"type": "number"}},
             ),
@@ -358,30 +366,40 @@ class FlightViewSet(ModelViewSet):
         parameters=[
             OpenApiParameter(
                 name="source_airport",
-                description="Filter by source airport (ex. ?source_airport=2)",
+                description=(
+                    "Filter by source airport id"
+                    " (ex. ?source_airport=2)."
+                    " Note: Only one id should be provided"
+                ),
                 required=False,
                 type=OpenApiTypes.STR,
             ),
             OpenApiParameter(
                 name="destination_airport",
                 description=(
-                    "Filter by destinations airport"
-                    " (ex. ?destination_airport=1)"
+                    "Filter by destinations airport id"
+                    " (ex. ?destination_airport=1)."
+                    " Note: Only one id should be provided"
                 ),
                 required=False,
                 type=OpenApiTypes.STR,
             ),
             OpenApiParameter(
                 name="source_city",
-                description="Filter by source city (ex. ?source_city=3)",
+                description=(
+                    "Filter by source city id"
+                    " (ex. ?source_city=3)."
+                    " Note: Only one id should be provided"
+                ),
                 required=False,
                 type=OpenApiTypes.STR,
             ),
             OpenApiParameter(
                 name="destination_city",
                 description=(
-                    "Filter by destinations city"
-                    " (ex. ?destination_city=4)"
+                    "Filter by destinations city id"
+                    " (ex. ?destination_city=4)."
+                    " Note: Only one id should be provided"
                 ),
                 required=False,
                 type=OpenApiTypes.STR,
