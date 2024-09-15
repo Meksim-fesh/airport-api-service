@@ -68,6 +68,16 @@ class CityViewSet(
 
         return serializers.CitySerializer
 
+    @extend_schema()
+    def list(self, request, *args, **kwargs):
+        """Returns list of cities"""
+        return super().list(request, *args, **kwargs)
+
+    @extend_schema()
+    def create(self, request, *args, **kwargs):
+        """Creates an instance of the City model"""
+        return super().create(request, *args, **kwargs)
+
 
 class AirportViewSet(
     mixins.CreateModelMixin,
@@ -167,6 +177,21 @@ class RouteViewSet(
             return serializers.RouteDetailSerializer
 
         return serializers.RouteSerializer
+
+    @extend_schema()
+    def list(self, request, *args, **kwargs):
+        """Returns list of routes"""
+        return super().list(request, *args, **kwargs)
+
+    @extend_schema()
+    def create(self, request, *args, **kwargs):
+        """Creates an instance of the Route model"""
+        return super().create(request, *args, **kwargs)
+
+    @extend_schema()
+    def retrieve(self, request, *args, **kwargs):
+        """Returns detailed information about an instance"""
+        return super().retrieve(request, *args, **kwargs)
 
 
 class FlightViewSet(ModelViewSet):
