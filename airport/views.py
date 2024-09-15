@@ -7,6 +7,9 @@ from rest_framework.response import Response
 
 from django.db.models import F, Count
 
+from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.types import OpenApiTypes
+
 from airport import models, serializers
 
 
@@ -255,6 +258,78 @@ class FlightViewSet(ModelViewSet):
             return serializers.FlightDetailSerializer
 
         return serializers.FlightSerializer
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name="source_airport",
+                description="Filter by source airport (ex. ?source_airport=2)",
+                required=False,
+                type=OpenApiTypes.STR,
+            ),
+            OpenApiParameter(
+                name="destination_airport",
+                description=(
+                    "Filter by destinations airport"
+                    " (ex. ?destination_airport=1)"
+                ),
+                required=False,
+                type=OpenApiTypes.STR,
+            ),
+            OpenApiParameter(
+                name="source_city",
+                description="Filter by source city (ex. ?source_city=3)",
+                required=False,
+                type=OpenApiTypes.STR,
+            ),
+            OpenApiParameter(
+                name="destination_city",
+                description=(
+                    "Filter by destinations city"
+                    " (ex. ?destination_city=4)"
+                ),
+                required=False,
+                type=OpenApiTypes.STR,
+            ),
+            OpenApiParameter(
+                name="departure_time",
+                description=(
+                    "Filter by departure time"
+                    " (ex. ?departure_time=2020-01-30)"
+                ),
+                required=False,
+                type=OpenApiTypes.DATE,
+            ),
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        """Returns list of flights"""
+        return super().list(request, *args, **kwargs)
+
+    @extend_schema()
+    def create(self, request, *args, **kwargs):
+        """Creates an instance of flight model"""
+        return super().create(request, *args, **kwargs)
+
+    @extend_schema()
+    def retrieve(self, request, *args, **kwargs):
+        """Returns detailed information about an instance"""
+        return super().retrieve(request, *args, **kwargs)
+
+    @extend_schema()
+    def partial_update(self, request, *args, **kwargs):
+        """Updates an instance (doesn't require all fields to be provided)"""
+        return super().partial_update(request, *args, **kwargs)
+
+    @extend_schema()
+    def update(self, request, *args, **kwargs):
+        """Updates an instance (requires all fields to be provided)"""
+        return super().update(request, *args, **kwargs)
+
+    @extend_schema()
+    def destroy(self, request, *args, **kwargs):
+        """Deletes an instance"""
+        return super().destroy(request, *args, **kwargs)
 
 
 class CrewViewSet(
