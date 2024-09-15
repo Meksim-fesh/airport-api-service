@@ -308,7 +308,7 @@ class FlightViewSet(ModelViewSet):
 
     @extend_schema()
     def create(self, request, *args, **kwargs):
-        """Creates an instance of flight model"""
+        """Creates an instance of the Flight model"""
         return super().create(request, *args, **kwargs)
 
     @extend_schema()
