@@ -174,6 +174,7 @@ class AirportViewSet(
         permission_classes=[IsAdminUser,]
     )
     def upload_image(self, request, pk=None):
+        """Endpoint for uploading an image to a specific airport"""
         airport = self.get_object()
         serializer = self.get_serializer(airport, data=request.data)
 
@@ -181,6 +182,45 @@ class AirportViewSet(
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name="cities",
+                description="Filter by city id (ex. ?cities=1,3)",
+                required=False,
+                type={"type": "list", "items": {"type": "number"}},
+            ),
+            OpenApiParameter(
+                name="country",
+                description="Filter by country id (ex. ?countries=2,6)",
+                required=False,
+                type={"type": "list", "items": {"type": "number"}},
+            ),
+            OpenApiParameter(
+                name="airport_name",
+                description=(
+                    "Filter by airport name"
+                    " (ex. ?airport_name=national)"
+                ),
+                required=False,
+                type=OpenApiTypes.STR,
+            )
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        """Returns list of airports"""
+        return super().list(request, *args, **kwargs)
+
+    @extend_schema()
+    def create(self, request, *args, **kwargs):
+        """Creates an instance of the Airport model"""
+        return super().create(request, *args, **kwargs)
+
+    @extend_schema()
+    def retrieve(self, request, *args, **kwargs):
+        """Returns detailed information about an instance"""
+        return super().retrieve(request, *args, **kwargs)
 
 
 class RouteViewSet(
