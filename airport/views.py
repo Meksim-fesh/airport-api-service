@@ -31,6 +31,16 @@ class AirplaneTypeViewSet(
     queryset = models.AirplaneType.objects.all()
     serializer_class = serializers.AirplaneTypeSerializer
 
+    @extend_schema()
+    def list(self, request, *args, **kwargs):
+        """Returns list of airplane types"""
+        return super().list(request, *args, **kwargs)
+
+    @extend_schema()
+    def create(self, request, *args, **kwargs):
+        """Creates an instance of the AirplaneType model"""
+        return super().create(request, *args, **kwargs)
+
 
 class AirplaneViewSet(
     mixins.CreateModelMixin,
@@ -45,6 +55,16 @@ class AirplaneViewSet(
 
         return serializers.AirplaneSerializer
 
+    @extend_schema()
+    def list(self, request, *args, **kwargs):
+        """Returns list of airplanes"""
+        return super().list(request, *args, **kwargs)
+
+    @extend_schema()
+    def create(self, request, *args, **kwargs):
+        """Creates an instnce of the Airplane model"""
+        return super().create(request, *args, **kwargs)
+
 
 class CountryViewSet(
     mixins.CreateModelMixin,
@@ -53,6 +73,16 @@ class CountryViewSet(
 ):
     queryset = models.Country.objects.all()
     serializer_class = serializers.CountrySerializer
+
+    @extend_schema()
+    def list(self, request, *args, **kwargs):
+        """Returns list of countries"""
+        return super().list(request, *args, **kwargs)
+
+    @extend_schema()
+    def create(self, request, *args, **kwargs):
+        """Creates an instance of the Country model"""
+        return super().create(request, *args, **kwargs)
 
 
 class CityViewSet(
