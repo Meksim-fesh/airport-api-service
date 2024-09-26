@@ -160,6 +160,7 @@ class FlightSerializer(serializers.ModelSerializer):
             "airplane",
             "departure_time",
             "arrival_time",
+            "crew",
         )
 
 

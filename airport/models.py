@@ -103,7 +103,7 @@ class Crew(models.Model):
 
 
 class Flight(models.Model):
-    crew = models.ManyToManyField(Crew)
+    crew = models.ManyToManyField(Crew, blank=True)
     route = models.ForeignKey(
         Route,
         on_delete=models.CASCADE,
