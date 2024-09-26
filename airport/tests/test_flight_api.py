@@ -279,3 +279,142 @@ class AuthenticatedFlightApiTest(TestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class AdminFlightApiTest(TestCase):
+    def setUp(self) -> None:
+        self.client = APIClient()
+        self.user = get_user_model().objects.create_user(
+            "admin@test.com",
+            "testpass",
+            is_staff=True,
+        )
+        self.client.force_authenticate(self.user)
+
+        self.country = models.Country.objects.create(
+            name="Test country",
+        )
+        self.airplane_type = models.AirplaneType.objects.create(
+            name="Test airplane type",
+        )
+
+        city_1 = sample_city(self.country)
+        city_2 = sample_city(self.country)
+
+        airport_1 = sample_airport(self.country, city_1)
+        airport_2 = sample_airport(self.country, city_2)
+
+        self.route = sample_route(airport_1, airport_2)
+        self.airplane = sample_airplane(self.airplane_type)
+
+    def test_create_flight(self):
+        payload = {
+            "route": self.route.id,
+            "airplane": self.airplane.id,
+            "departure_time": "2024-09-01 12:00:00",
+            "arrival_time": "2024-09-02 12:00:00",
+        }
+
+        response = self.client.post(FLIGHT_URL, payload)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        flight = models.Flight.objects.get(id=response.data["id"])
+
+        self.assertEqual(self.route, getattr(flight, "route"))
+        self.assertEqual(self.airplane, getattr(flight, "airplane"))
+
+    def test_create_flight_with_crew(self):
+        crew_1 = models.Crew.objects.create(
+            first_name="First_name_1",
+            last_name="Last_name_1",
+        )
+        crew_2 = models.Crew.objects.create(
+            first_name="First_name_2",
+            last_name="Last_name_2",
+        )
+
+        payload = {
+            "crew": [crew_1.id, crew_2.id],
+            "route": self.route.id,
+            "airplane": self.airplane.id,
+            "departure_time": "2024-09-01 12:00:00",
+            "arrival_time": "2024-09-02 12:00:00",
+        }
+
+        response = self.client.post(FLIGHT_URL, payload)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        flight = models.Flight.objects.get(id=response.data["id"])
+        crew = flight.crew.all()
+
+        self.assertEqual(crew.count(), 2)
+        self.assertIn(crew_1, crew)
+        self.assertIn(crew_2, crew)
+
+    def test_update_flight(self):
+        wrong_airplane = sample_airplane(
+            self.airplane_type,
+            name="Wrong airplane",
+        )
+        new_airplane = sample_airplane(
+            self.airplane_type,
+            name="New airplane",
+        )
+
+        flight = sample_flight(
+            self.route,
+            wrong_airplane,
+        )
+
+        payload = {
+            "route": self.route.id,
+            "airplane": new_airplane.id,
+            "departure_time": "2024-09-01 12:00:00",
+            "arrival_time": "2024-09-02 12:00:00",
+        }
+
+        url = get_detail_url(flight.id)
+        response = self.client.put(url, payload)
+        flight.refresh_from_db()
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(new_airplane, flight.airplane)
+
+    def test_partial_update_flight(self):
+        wrong_airplane = sample_airplane(
+            self.airplane_type,
+            name="Wrong airplane",
+        )
+        new_airplane = sample_airplane(
+            self.airplane_type,
+            name="New airplane",
+        )
+
+        flight = sample_flight(
+            self.route,
+            wrong_airplane,
+        )
+
+        payload = {
+            "airplane": new_airplane.id,
+        }
+
+        url = get_detail_url(flight.id)
+        response = self.client.patch(url, payload)
+        flight.refresh_from_db()
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(new_airplane, flight.airplane)
+
+    def test_destroy_flight(self):
+        flight_1 = sample_flight(self.route, self.airplane)
+        flight_2 = sample_flight(self.route, self.airplane)
+
+        url = get_detail_url(flight_1.id)
+        response = self.client.delete(url)
+
+        flights = models.Flight.objects.all()
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertNotIn(flight_1, flights)
+        self.assertIn(flight_2, flights)
