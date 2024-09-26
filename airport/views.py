@@ -31,12 +31,10 @@ class AirplaneTypeViewSet(
     queryset = models.AirplaneType.objects.all()
     serializer_class = serializers.AirplaneTypeSerializer
 
-    @extend_schema()
     def list(self, request, *args, **kwargs):
         """Returns list of airplane types"""
         return super().list(request, *args, **kwargs)
 
-    @extend_schema()
     def create(self, request, *args, **kwargs):
         """Creates an instance of the AirplaneType model"""
         return super().create(request, *args, **kwargs)
@@ -55,12 +53,10 @@ class AirplaneViewSet(
 
         return serializers.AirplaneSerializer
 
-    @extend_schema()
     def list(self, request, *args, **kwargs):
         """Returns list of airplanes"""
         return super().list(request, *args, **kwargs)
 
-    @extend_schema()
     def create(self, request, *args, **kwargs):
         """Creates an instnce of the Airplane model"""
         return super().create(request, *args, **kwargs)
@@ -74,12 +70,10 @@ class CountryViewSet(
     queryset = models.Country.objects.all()
     serializer_class = serializers.CountrySerializer
 
-    @extend_schema()
     def list(self, request, *args, **kwargs):
         """Returns list of countries"""
         return super().list(request, *args, **kwargs)
 
-    @extend_schema()
     def create(self, request, *args, **kwargs):
         """Creates an instance of the Country model"""
         return super().create(request, *args, **kwargs)
@@ -98,12 +92,10 @@ class CityViewSet(
 
         return serializers.CitySerializer
 
-    @extend_schema()
     def list(self, request, *args, **kwargs):
         """Returns list of cities"""
         return super().list(request, *args, **kwargs)
 
-    @extend_schema()
     def create(self, request, *args, **kwargs):
         """Creates an instance of the City model"""
         return super().create(request, *args, **kwargs)
@@ -220,12 +212,10 @@ class AirportViewSet(
         """Returns list of airports"""
         return super().list(request, *args, **kwargs)
 
-    @extend_schema()
     def create(self, request, *args, **kwargs):
         """Creates an instance of the Airport model"""
         return super().create(request, *args, **kwargs)
 
-    @extend_schema()
     def retrieve(self, request, *args, **kwargs):
         """Returns detailed information about an instance"""
         return super().retrieve(request, *args, **kwargs)
@@ -256,17 +246,14 @@ class RouteViewSet(
 
         return serializers.RouteSerializer
 
-    @extend_schema()
     def list(self, request, *args, **kwargs):
         """Returns list of routes"""
         return super().list(request, *args, **kwargs)
 
-    @extend_schema()
     def create(self, request, *args, **kwargs):
         """Creates an instance of the Route model"""
         return super().create(request, *args, **kwargs)
 
-    @extend_schema()
     def retrieve(self, request, *args, **kwargs):
         """Returns detailed information about an instance"""
         return super().retrieve(request, *args, **kwargs)
@@ -419,27 +406,22 @@ class FlightViewSet(ModelViewSet):
         """Returns list of flights"""
         return super().list(request, *args, **kwargs)
 
-    @extend_schema()
     def create(self, request, *args, **kwargs):
         """Creates an instance of the Flight model"""
         return super().create(request, *args, **kwargs)
 
-    @extend_schema()
     def retrieve(self, request, *args, **kwargs):
         """Returns detailed information about an instance"""
         return super().retrieve(request, *args, **kwargs)
 
-    @extend_schema()
     def partial_update(self, request, *args, **kwargs):
         """Updates an instance (doesn't require all fields to be provided)"""
         return super().partial_update(request, *args, **kwargs)
 
-    @extend_schema()
     def update(self, request, *args, **kwargs):
         """Updates an instance (requires all fields to be provided)"""
         return super().update(request, *args, **kwargs)
 
-    @extend_schema()
     def destroy(self, request, *args, **kwargs):
         """Deletes an instance"""
         return super().destroy(request, *args, **kwargs)
@@ -453,12 +435,10 @@ class CrewViewSet(
     queryset = models.Crew.objects.all()
     serializer_class = serializers.CrewSerializer
 
-    @extend_schema()
     def list(self, request, *args, **kwargs):
         """Returns list of crew members"""
         return super().list(request, *args, **kwargs)
 
-    @extend_schema()
     def create(self, request, *args, **kwargs):
         """Creates an instance of the Crew model"""
         return super().create(request, *args, **kwargs)
@@ -490,12 +470,10 @@ class OrderViewSet(
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-    @extend_schema()
     def list(self, request, *args, **kwargs):
         """Returns list of user orders"""
         return super().list(request, *args, **kwargs)
 
-    @extend_schema()
     def create(self, request, *args, **kwargs):
         """Creates an instance of the Order model"""
         return super().create(request, *args, **kwargs)
