@@ -5,7 +5,8 @@ from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 from rest_framework import status
 
-from airport import models, serializers
+from airport import models
+from airport.serializers import FlightListSerializer, FlightDetailSerializer
 
 
 FLIGHT_URL = reverse("airport:flight-list")
@@ -132,7 +133,7 @@ class AuthenticatedFlightApiTest(TestCase):
         response = self.client.get(FLIGHT_URL)
 
         flights = models.Flight.objects.all()
-        serializer = serializers.FlightListSerializer(flights, many=True)
+        serializer = FlightListSerializer(flights, many=True)
 
         for flight_data in response.data["results"]:
             self.assertIn("tickets_available", flight_data)
@@ -161,8 +162,8 @@ class AuthenticatedFlightApiTest(TestCase):
             FLIGHT_URL, {"source_city": city_1.id}
         )
 
-        serializer_1 = serializers.FlightListSerializer(flight_1)
-        serializer_2 = serializers.FlightListSerializer(flight_2)
+        serializer_1 = FlightListSerializer(flight_1)
+        serializer_2 = FlightListSerializer(flight_2)
 
         response = remove_tickets_available_fields(response)
 
@@ -195,8 +196,8 @@ class AuthenticatedFlightApiTest(TestCase):
             FLIGHT_URL, {"source_airport": airport_1.id}
         )
 
-        serializer_1 = serializers.FlightListSerializer(flight_1)
-        serializer_2 = serializers.FlightListSerializer(flight_2)
+        serializer_1 = FlightListSerializer(flight_1)
+        serializer_2 = FlightListSerializer(flight_2)
 
         response = remove_tickets_available_fields(response)
 
@@ -239,8 +240,8 @@ class AuthenticatedFlightApiTest(TestCase):
 
         response = remove_tickets_available_fields(response)
 
-        serializer_1 = serializers.FlightListSerializer(flight_1)
-        serializer_2 = serializers.FlightListSerializer(flight_2)
+        serializer_1 = FlightListSerializer(flight_1)
+        serializer_2 = FlightListSerializer(flight_2)
 
         self.assertNotIn(serializer_1.data, response.data["results"])
         self.assertIn(serializer_2.data, response.data["results"])
@@ -257,7 +258,7 @@ class AuthenticatedFlightApiTest(TestCase):
         url = get_detail_url(flight.id)
         response = self.client.get(url)
 
-        serializer = serializers.FlightDetailSerializer(flight)
+        serializer = FlightDetailSerializer(flight)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, serializer.data)
