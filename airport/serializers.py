@@ -245,6 +245,16 @@ class OrderSerializer(serializers.ModelSerializer):
             tickets_data = validated_data.pop("tickets")
             order = models.Order.objects.create(**validated_data)
             for ticket_data in tickets_data:
+                if models.Ticket.objects.filter(
+                    flight=ticket_data["flight"],
+                    row=ticket_data["row"],
+                    seat=ticket_data["seat"],
+                ).exists():
+                    raise ValidationError(
+                        {
+                            "tickets": "The same ticket already exist"
+                        }
+                    )
                 models.Ticket.objects.create(order=order, **ticket_data)
             return order
 
