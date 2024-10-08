@@ -70,6 +70,7 @@ The project diagram can be found in `documents` folder
 ## How to Launch the Project Without Docker
 
 First, install PostgreSQL and create a db
+
 (If you want to use default SQLite3, you can find the instruction bellow)
 
 ### 1. Clone the Repository
@@ -171,7 +172,7 @@ DATABASES = {
 
 ## How to Launch the Project With Docker
 
-### 1. Go Trough Steps 1-5 Above
+### 1. Go Through Steps 1-5 Above
 
 ### 2. Build the Container
 
@@ -187,7 +188,7 @@ docker-compose up
 
 ## How to Gain an Access
 
-### 1. Create user
+### 1. Create User
 
 Create regular user at */api/user/register/*
 
@@ -197,7 +198,7 @@ or create super user (admin) with the command from the above-mentioned Step 7:
 python manage.py createsuperuser
 ```
 
-### 2. Get access token
+### 2. Get Access Token
 
 Go to */api/user/token/* to get an access token.
 
@@ -206,6 +207,7 @@ To use token you can download *ModHeader* extension for *Google Chrome*/*Opera* 
 Example:
 
 **Header Name**: Authorization
+
 **Header Value**: Bearer your-token
 
 By default, the access token has a short validity period (5 minutes). You can change this in `settings.py` file by modifying following line:
